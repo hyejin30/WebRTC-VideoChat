@@ -1,6 +1,6 @@
 import React, {useCallback} from 'react';
 import {SafeAreaView, Text, View} from 'react-native';
-import {SignUpScreenProps} from '~/types/types';
+import {SignUpScreenProps} from 'types/types';
 
 function SignUp({navigation}: SignUpScreenProps) {
   return (

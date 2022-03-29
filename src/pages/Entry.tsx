@@ -1,7 +1,7 @@
 import React, {useCallback} from 'react';
 import {Text, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {EntryScreenProps} from '~/types/types';
+import {EntryScreenProps} from 'types/types';
 
 function Entry({navigation}: EntryScreenProps) {
   return (

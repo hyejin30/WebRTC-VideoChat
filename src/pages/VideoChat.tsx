@@ -1,6 +1,6 @@
 import React from 'react';
 import {SafeAreaView, Text, View} from 'react-native';
-import {MainScreenProps} from '~/types/types';
+import {MainScreenProps} from 'types/types';
 
 function VideoChat({navigation}: MainScreenProps) {
   return (
