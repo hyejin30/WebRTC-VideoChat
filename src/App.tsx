@@ -15,11 +15,7 @@ function App() {
         initialRouteName="Entry"
         screenOptions={{headerShown: false}}>
         <Stack.Screen name="Entry" component={Entry} />
-        <Stack.Screen
-          name="SignUp"
-          component={SignUp}
-          options={{title: '회원가입'}}
-        />
+        <Stack.Screen name="SignUp" component={SignUp} />
         <Stack.Screen name="SignIn" component={SignIn} />
         <Stack.Screen name="Main" component={Main} />
         <Stack.Screen name="VideoChat" component={VideoChat} />
