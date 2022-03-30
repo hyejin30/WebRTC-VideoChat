@@ -13,7 +13,7 @@
     "paths": {
       "/*": ["./*"],
       "@pages/*": ["pages/*"],
-      "@images/*": ["images/*"]
+      "@images/*": ["assets/images/*"]
     },
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
