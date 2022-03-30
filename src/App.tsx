@@ -11,32 +11,18 @@ const Stack = createNativeStackNavigator();
 function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="SignUp">
-        <Stack.Screen
-          name="Entry"
-          component={Entry}
-          options={{headerShown: false}}
-        />
+      <Stack.Navigator
+        initialRouteName="Entry"
+        screenOptions={{headerShown: false}}>
+        <Stack.Screen name="Entry" component={Entry} />
         <Stack.Screen
           name="SignUp"
           component={SignUp}
-          options={{title: '회원가입', headerShown: false}}
+          options={{title: '회원가입'}}
         />
-        <Stack.Screen
-          name="SignIn"
-          component={SignIn}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="Main"
-          component={Main}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="VideoChat"
-          component={VideoChat}
-          options={{headerShown: false}}
-        />
+        <Stack.Screen name="SignIn" component={SignIn} />
+        <Stack.Screen name="Main" component={Main} />
+        <Stack.Screen name="VideoChat" component={VideoChat} />
       </Stack.Navigator>
     </NavigationContainer>
   );
