@@ -20,3 +20,7 @@ export type VideoChatScreenProps = NativeStackScreenProps<
   ParamListBase,
   'VideoChat'
 >;
+
+export type UserInfo = {
+  [key: string]: string;
+};
