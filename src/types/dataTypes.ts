@@ -29,6 +29,11 @@ export type SignUpInfoProps = {
   passwordVerify: string;
 };
 
+export type SignInInfoProps = {
+  email: string;
+  password: string;
+};
+
 export type LogoProps = {
   width: number;
   height: number;
