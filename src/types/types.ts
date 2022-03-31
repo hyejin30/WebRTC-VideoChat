@@ -24,3 +24,7 @@ export type VideoChatScreenProps = NativeStackScreenProps<
 export type UserInfo = {
   [key: string]: string;
 };
+
+export type PwShown = {
+  [key: string]: boolean;
+};
