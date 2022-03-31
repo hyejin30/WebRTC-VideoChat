@@ -11,9 +11,10 @@
     "moduleResolution": "node",
     "baseUrl": "./src",
     "paths": {
-      "/*": ["./*"],
-      "@pages/*": ["pages/*"],
-      "@images/*": ["assets/images/*"]
+      "types/*": ["types/*"],
+      "hooks/*": ["hooks/*"],
+      "pages/*": ["pages/*"],
+      "images/*": ["assets/images/*"]
     },
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,

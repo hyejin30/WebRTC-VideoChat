@@ -15,7 +15,7 @@ function App() {
     <NavigationContainer>
       <ThemeProvider theme={theme}>
         <Stack.Navigator
-          initialRouteName="Entry"
+          initialRouteName="SignIn"
           screenOptions={{headerShown: false}}>
           <Stack.Screen name="Entry" component={Entry} />
           <Stack.Screen name="SignUp" component={SignUp} />
