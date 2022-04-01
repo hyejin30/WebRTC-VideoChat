@@ -6,11 +6,7 @@ type ButtonProps = {
   onPress: Function;
 };
 
-export const StyledButton: FC<ButtonProps> = ({
-  children,
-  disabled,
-  onPress,
-}) => {
+const StyledButton: FC<ButtonProps> = ({children, disabled, onPress}) => {
   return (
     <Button disabled={disabled} onPress={() => onPress()}>
       <ButtonText>{children}</ButtonText>
@@ -34,3 +30,5 @@ const ButtonText = styled.Text`
   font-weight: 700;
   color: ${({theme}) => theme.color.white};
 `;
+
+export default StyledButton;

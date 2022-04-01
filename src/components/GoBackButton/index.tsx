@@ -1,12 +1,12 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import {GoBackProps} from 'types/types';
-import Images from '../assets/images/index';
+import {icBackArrow} from '~/assets/images';
 
-export function GoBackButton({page, onPress}: GoBackProps) {
+function GoBackButton({page, onPress}: GoBackProps) {
   return (
     <Button onPress={() => onPress(page)}>
-      <GoBackIcon source={Images.backArrowIcon} />
+      <GoBackIcon source={icBackArrow} />
     </Button>
   );
 }
@@ -20,3 +20,5 @@ const GoBackIcon = styled.Image`
   width: ${({theme}) => theme.fontSize.header};
   height: ${({theme}) => theme.fontSize.header};
 `;
+
+export default GoBackButton;

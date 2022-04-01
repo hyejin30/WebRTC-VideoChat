@@ -1,20 +1,22 @@
 import React from 'react';
 import styled from 'styled-components/native';
 
-export type Props = {
+type Props = {
   label: string;
   info: string;
   placeholder: string;
   value: string;
   onChangeText: Function;
+  onBlur: Function;
 };
 
-export function LabelInput({
+function LabelInput({
   label,
   info,
   placeholder,
   value,
   onChangeText,
+  onBlur,
 }: Props) {
   return (
     <>
@@ -23,6 +25,7 @@ export function LabelInput({
         placeholder={placeholder}
         value={value}
         onChangeText={(text: string) => onChangeText(info, text)}
+        onBlur={() => onBlur(info, value)}
       />
     </>
   );
@@ -40,3 +43,5 @@ const Input = styled.TextInput`
   border-radius: 8px;
   font-size: ${({theme}) => theme.fontSize.body};
 `;
+
+export default LabelInput;

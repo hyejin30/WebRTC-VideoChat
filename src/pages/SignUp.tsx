@@ -1,23 +1,18 @@
-import React, {useState, useCallback} from 'react';
-import {Alert, View} from 'react-native';
-import styled from 'styled-components/native';
-import {GoBackButton} from '../components/GoBackButton';
-import {LabelInput} from '../components/LabelInput';
-import {LabelPwInput} from '../components/LabelPwInput';
-import {StyledButton} from '../components/StyledButton';
-import {SignUpScreenProps} from 'types/types';
-import {postSignUpInfo} from '../hooks/hooks';
+import React, {useCallback} from 'react';
+import {View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import styled from 'styled-components/native';
+import {
+  GoBackButton,
+  LabelInput,
+  LabelPwInput,
+  StyledButton,
+  WarningText,
+} from '~/components';
+import {SignUpScreenProps} from 'types/types';
+import {useSignUp} from '~/hooks';
 
 function SignUp({navigation}: SignUpScreenProps) {
-  const [signUpInfo, setSignUpInfo] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    passwordVerify: '',
-  });
-
   const changePage = useCallback(
     (page: string) => {
       navigation.navigate(page);
@@ -25,38 +20,47 @@ function SignUp({navigation}: SignUpScreenProps) {
     [navigation],
   );
 
-  const updateSignUpInfo = (info: string, value: string) => {
-    setSignUpInfo(prev => ({...prev, [info]: value}));
-  };
-
-  const signUp = async () => {
-    try {
-      const result = await postSignUpInfo(signUpInfo);
-      // FIXME : 가입 완료 후 로직 수정 예정
-      if (result) {
-        Alert.alert('가입이 완료되었습니다');
-        changePage('Main');
-      }
-    } catch (error) {
-      // FIXME : postSignUpInfo, signUp 에러 처리 차이점?
-      if (error instanceof Error) {
-        Alert.alert(error.message);
-      } else {
-        Alert.alert(String(error));
-      }
-    }
-  };
+  const {
+    signUpInfo,
+    warningValid,
+    warningText,
+    updateSignUpInfo,
+    checkSignUpInfo,
+    signUp,
+  } = useSignUp(changePage);
 
   const {firstName, lastName, email, password, passwordVerify} = signUpInfo;
 
-  const isButtonValid: boolean = Boolean(
-    firstName &&
-      lastName &&
-      email &&
-      password &&
-      passwordVerify &&
-      password === passwordVerify,
-  );
+  const {
+    isFirstNameWarning,
+    isLastNameWarning,
+    isEmailWarning,
+    isPwWarning,
+    isPwVerifyWarning,
+  } = warningValid;
+
+  const {
+    firstNameWarningText,
+    lastNameWarningText,
+    emailWarningText,
+    pwWarningText,
+    pwVerifyWarningText,
+  } = warningText;
+
+  const isButtonValid: boolean =
+    Boolean(
+      firstName &&
+        lastName &&
+        email &&
+        password &&
+        passwordVerify &&
+        password === passwordVerify,
+    ) &&
+    !isFirstNameWarning &&
+    !isLastNameWarning &&
+    !isEmailWarning &&
+    !isPwWarning &&
+    !isPwVerifyWarning;
 
   return (
     <StyledSafeAreaView>
@@ -75,7 +79,11 @@ function SignUp({navigation}: SignUpScreenProps) {
                   value={firstName}
                   placeholder="성을 입력해주세요"
                   onChangeText={updateSignUpInfo}
+                  onBlur={checkSignUpInfo}
                 />
+                {isFirstNameWarning && (
+                  <WarningText>{firstNameWarningText}</WarningText>
+                )}
               </FirstNameView>
               <LastNameView>
                 <LabelInput
@@ -84,7 +92,11 @@ function SignUp({navigation}: SignUpScreenProps) {
                   value={lastName}
                   placeholder="이름을 입력해주세요"
                   onChangeText={updateSignUpInfo}
+                  onBlur={checkSignUpInfo}
                 />
+                {isLastNameWarning && (
+                  <WarningText>{lastNameWarningText}</WarningText>
+                )}
               </LastNameView>
             </RowInputView>
             <InputView>
@@ -94,7 +106,9 @@ function SignUp({navigation}: SignUpScreenProps) {
                 value={email}
                 placeholder="이메일을 입력해주세요"
                 onChangeText={updateSignUpInfo}
+                onBlur={checkSignUpInfo}
               />
+              {isEmailWarning && <WarningText>{emailWarningText}</WarningText>}
             </InputView>
             <InputView>
               <LabelPwInput
@@ -103,7 +117,9 @@ function SignUp({navigation}: SignUpScreenProps) {
                 value={password}
                 placeholder="비밀번호를 입력해주세요"
                 onChangeText={updateSignUpInfo}
+                onBlur={checkSignUpInfo}
               />
+              {isPwWarning && <WarningText>{pwWarningText}</WarningText>}
             </InputView>
             <InputView>
               <LabelPwInput
@@ -112,7 +128,11 @@ function SignUp({navigation}: SignUpScreenProps) {
                 value={passwordVerify}
                 placeholder="비밀번호를 다시 입력해주세요"
                 onChangeText={updateSignUpInfo}
+                onBlur={checkSignUpInfo}
               />
+              {isPwVerifyWarning && (
+                <WarningText>{pwVerifyWarningText}</WarningText>
+              )}
             </InputView>
           </View>
           <StyledButton disabled={!isButtonValid} onPress={signUp}>
@@ -123,6 +143,7 @@ function SignUp({navigation}: SignUpScreenProps) {
     </StyledSafeAreaView>
   );
 }
+
 const StyledSafeAreaView = styled(SafeAreaView)`
   flex: 1;
 `;
