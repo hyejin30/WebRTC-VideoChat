@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import styled from 'styled-components/native';
 import Images from '../assets/images/index';
-import {PwShown} from '/types/types';
+import {IsPwNotShownProps} from 'types/types';
 
 export type Props = {
   label: string;
@@ -18,7 +18,7 @@ export function LabelPwInput({
   value,
   onChangeText,
 }: Props) {
-  const initialValue: PwShown = {
+  const initialValue: IsPwNotShownProps = {
     password: true,
     passwordVerify: true,
   };

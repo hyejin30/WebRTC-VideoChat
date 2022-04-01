@@ -21,10 +21,20 @@ export type VideoChatScreenProps = NativeStackScreenProps<
   'VideoChat'
 >;
 
-export type UserInfo = {
+export type UserInfoProps = {
   [key: string]: string;
 };
 
-export type PwShown = {
+export type IsPwNotShownProps = {
   [key: string]: boolean;
+};
+
+export type GoBackProps = {
+  page: string;
+  onPress: Function;
+};
+
+export type LogoProps = {
+  width: number;
+  height: number;
 };

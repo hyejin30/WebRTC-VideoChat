@@ -1,12 +1,12 @@
 import React, {useState, useCallback} from 'react';
 import {Alert, View} from 'react-native';
 import styled from 'styled-components/native';
+import {GoBackButton} from '../components/GoBackButton';
 import {LabelInput} from '../components/LabelInput';
 import {LabelPwInput} from '../components/LabelPwInput';
 import {StyledButton} from '../components/StyledButton';
 import {SignUpScreenProps} from 'types/types';
 import {postSignUpInfo} from '../hooks/hooks';
-import Images from '../assets/images/index';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 function SignUp({navigation}: SignUpScreenProps) {
@@ -62,9 +62,7 @@ function SignUp({navigation}: SignUpScreenProps) {
     <StyledSafeAreaView>
       <ContainerView>
         <HeaderView>
-          <GoBackButton onPress={() => changePage('Entry')}>
-            <GoBackIcon source={Images.backArrowIcon} />
-          </GoBackButton>
+          <GoBackButton page="Entry" onPress={changePage} />
           <HeaderText>회원가입</HeaderText>
         </HeaderView>
         <FormView>
@@ -139,16 +137,6 @@ const HeaderView = styled.View`
   flex-direction: row;
   justify-content: center;
   position: relative;
-`;
-
-const GoBackButton = styled.Pressable`
-  position: absolute;
-  left: 0;
-`;
-
-const GoBackIcon = styled.Image`
-  width: ${({theme}) => theme.fontSize.header};
-  height: ${({theme}) => theme.fontSize.header};
 `;
 
 const HeaderText = styled.Text`
