@@ -2,12 +2,12 @@ import * as React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {ThemeProvider} from 'styled-components/native';
-import Entry from './pages/Entry';
-import SignUp from './pages/SignUp';
-import SignIn from './pages/SignIn';
-import Main from './pages/Main';
-import VideoChat from './pages/VideoChat';
-import theme from './styles/theme';
+import Entry from '@pages/Entry';
+import SignUp from '@pages/SignUp';
+import SignIn from '@pages/SignIn';
+import Main from '@pages/Main';
+import VideoChat from '@pages/VideoChat';
+import theme from '~/styles/theme';
 
 const Stack = createNativeStackNavigator();
 function App() {
