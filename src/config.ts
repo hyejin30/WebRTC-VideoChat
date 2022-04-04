@@ -1,4 +1,6 @@
-const baseUri: String = 'http://172.30.1.30:8080';
+import Config from 'react-native-config';
+
+const baseUri: String = Config.API_APP_KEY;
 
 export const fetchApi = {
   signIn: `${baseUri}/users/signin`,

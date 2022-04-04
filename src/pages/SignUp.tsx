@@ -9,7 +9,7 @@ import {
   StyledButton,
   WarningText,
 } from '~/components';
-import {SignUpScreenProps} from 'types/types';
+import {SignUpScreenProps} from '~/types/dataTypes';
 import {useSignUp} from '~/hooks';
 
 function SignUp({navigation}: SignUpScreenProps) {
