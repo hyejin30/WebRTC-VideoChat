@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import styled from 'styled-components/native';
 import {icEyeOff, icEyeOn} from '~/assets/images';
-import {IsPwNotShownProps} from 'types/types';
 
 type Props = {
   label: string;
@@ -20,15 +19,10 @@ function LabelPwInput({
   onChangeText,
   onBlur,
 }: Props) {
-  const initialValue: IsPwNotShownProps = {
-    password: true,
-    passwordVerify: true,
-  };
+  const [isPwNotShown, setIsPwNotShown] = useState(true);
 
-  const [isPwNotShown, setIsPwNotShown] = useState(initialValue);
-
-  const handleShowPw = (name: string, valid: boolean) => {
-    setIsPwNotShown(prev => ({...prev, [name]: !valid}));
+  const handleShowPw = () => {
+    setIsPwNotShown(!isPwNotShown);
   };
 
   return (
@@ -38,12 +32,12 @@ function LabelPwInput({
         <Input
           placeholder={placeholder}
           value={value}
-          secureTextEntry={isPwNotShown[info]}
+          secureTextEntry={isPwNotShown}
           onChangeText={(text: string) => onChangeText(info, text)}
           onBlur={() => onBlur(info, value)}
         />
-        <ShowPwButton onPress={() => handleShowPw(info, isPwNotShown[info])}>
-          <ShowPwIcon source={isPwNotShown[info] ? icEyeOff : icEyeOn} />
+        <ShowPwButton onPress={() => handleShowPw()}>
+          <ShowPwIcon source={isPwNotShown ? icEyeOff : icEyeOn} />
         </ShowPwButton>
       </PwInputWrapView>
     </>

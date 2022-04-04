@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import {GoBackProps} from 'types/types';
+import {GoBackProps} from '~/types/dataTypes';
 import {icBackArrow} from '~/assets/images';
 
 function GoBackButton({page, onPress}: GoBackProps) {

@@ -34,6 +34,15 @@ const useSignUp = (changePage: Function) => {
   });
 
   const {password, passwordVerify} = signUpInfo;
+
+  const {
+    isFirstNameWarning,
+    isLastNameWarning,
+    isEmailWarning,
+    isPwWarning,
+    isPwVerifyWarning,
+  } = warningValid;
+
   const {
     noValue,
     nameFormat,
@@ -42,6 +51,27 @@ const useSignUp = (changePage: Function) => {
     pwFormat,
     pwMatching,
   } = MAPPING_MESSAGE;
+
+  const handleButtonValid = () => {
+    const {firstName, lastName, email} = signUpInfo;
+
+    const valid: boolean =
+      Boolean(
+        firstName &&
+          lastName &&
+          email &&
+          password &&
+          passwordVerify &&
+          password === passwordVerify,
+      ) &&
+      !isFirstNameWarning &&
+      !isLastNameWarning &&
+      !isEmailWarning &&
+      !isPwWarning &&
+      !isPwVerifyWarning;
+
+    return valid;
+  };
 
   const updateSignUpInfo = (info: string, value: string) => {
     setSignUpInfo(prev => ({...prev, [info]: value}));
@@ -130,6 +160,7 @@ const useSignUp = (changePage: Function) => {
     signUpInfo,
     warningValid,
     warningText,
+    handleButtonValid,
     updateSignUpInfo,
     checkSignUpInfo,
     signUp,

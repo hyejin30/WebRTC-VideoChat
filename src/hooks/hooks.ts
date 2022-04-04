@@ -1,8 +1,8 @@
 import {Alert} from 'react-native';
-import {UserInfoProps} from 'types/types';
+import {SignUpInfoProps} from '~/types/dataTypes';
 import {fetchApi} from '~/config';
 
-export const postSignUpInfo = async (signUpInfo: UserInfoProps) => {
+export const postSignUpInfo = async (signUpInfo: SignUpInfoProps) => {
   let body;
 
   const {firstName, lastName, email, password} = signUpInfo;

@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
@@ -24,6 +24,7 @@ function SignUp({navigation}: SignUpScreenProps) {
     signUpInfo,
     warningValid,
     warningText,
+    handleButtonValid,
     updateSignUpInfo,
     checkSignUpInfo,
     signUp,
@@ -47,20 +48,10 @@ function SignUp({navigation}: SignUpScreenProps) {
     pwVerifyWarningText,
   } = warningText;
 
-  const isButtonValid: boolean =
-    Boolean(
-      firstName &&
-        lastName &&
-        email &&
-        password &&
-        passwordVerify &&
-        password === passwordVerify,
-    ) &&
-    !isFirstNameWarning &&
-    !isLastNameWarning &&
-    !isEmailWarning &&
-    !isPwWarning &&
-    !isPwVerifyWarning;
+  const isButtonValid: boolean = useMemo(
+    () => handleButtonValid(),
+    [handleButtonValid],
+  );
 
   return (
     <StyledSafeAreaView>
