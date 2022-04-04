@@ -17,31 +17,23 @@ const useSignUp = (changePage: Function) => {
     passwordVerify: '',
   });
 
-  const [warningValid, setWarningValid] = useState({
-    isFirstNameWarning: false,
-    isLastNameWarning: false,
-    isEmailWarning: false,
-    isPwWarning: false,
-    isPwVerifyWarning: false,
+  const [warnings, setWarnings] = useState({
+    firstNameWarning: '',
+    lastNameWarning: '',
+    emailWarning: '',
+    pwWarning: '',
+    pwVerifyWarning: '',
   });
 
-  const [warningText, setWarningText] = useState({
-    firstNameWarningText: '',
-    lastNameWarningText: '',
-    emailWarningText: '',
-    pwWarningText: '',
-    pwVerifyWarningText: '',
-  });
-
-  const {password, passwordVerify} = signUpInfo;
+  const {firstName, lastName, email, password, passwordVerify} = signUpInfo;
 
   const {
-    isFirstNameWarning,
-    isLastNameWarning,
-    isEmailWarning,
-    isPwWarning,
-    isPwVerifyWarning,
-  } = warningValid;
+    firstNameWarning,
+    lastNameWarning,
+    emailWarning,
+    pwWarning,
+    pwVerifyWarning,
+  } = warnings;
 
   const {
     noValue,
@@ -53,23 +45,19 @@ const useSignUp = (changePage: Function) => {
   } = MAPPING_MESSAGE;
 
   const handleButtonValid = () => {
-    const {firstName, lastName, email} = signUpInfo;
-
-    const valid: boolean =
-      Boolean(
-        firstName &&
-          lastName &&
-          email &&
-          password &&
-          passwordVerify &&
-          password === passwordVerify,
-      ) &&
-      !isFirstNameWarning &&
-      !isLastNameWarning &&
-      !isEmailWarning &&
-      !isPwWarning &&
-      !isPwVerifyWarning;
-
+    const valid: boolean = !!(
+      firstName &&
+      lastName &&
+      email &&
+      password &&
+      passwordVerify &&
+      password === passwordVerify &&
+      !firstNameWarning &&
+      !lastNameWarning &&
+      !emailWarning &&
+      !pwWarning &&
+      !pwVerifyWarning
+    );
     return valid;
   };
 
@@ -79,36 +67,22 @@ const useSignUp = (changePage: Function) => {
 
   const checkSignUpInfo = (info: string, value: string) => {
     if (info === 'firstName') {
-      const result = validateName(value);
-      setWarningValid(prev => ({...prev, isFirstNameWarning: !result}));
-      if (!result) {
-        setWarningText(prev => ({...prev, firstNameWarningText: nameFormat}));
-      }
+      const result = validateName(value) ? '' : nameFormat;
+      setWarnings(prev => ({...prev, firstNameWarning: result}));
     } else if (info === 'lastName') {
-      const result = validateName(value);
-      setWarningValid(prev => ({...prev, isLastNameWarning: !result}));
-      if (!result) {
-        setWarningText(prev => ({...prev, lastNameWarningText: nameFormat}));
-      }
+      const result = validateName(value) ? '' : nameFormat;
+      setWarnings(prev => ({...prev, lastNameWarning: result}));
     } else if (info === 'email') {
-      const result = validateEmail(value);
-      setWarningValid(prev => ({...prev, isEmailWarning: !result}));
-      if (!result) {
-        setWarningText(prev => ({...prev, emailWarningText: emailFormat}));
-      }
+      const result = validateEmail(value) ? '' : emailFormat;
+      setWarnings(prev => ({...prev, emailWarning: result}));
     } else if (info === 'password') {
-      const result = validatePassword(value);
-      setWarningValid(prev => ({...prev, isPwWarning: !result}));
-      if (!result) {
-        setWarningText(prev => ({...prev, pwWarningText: pwFormat}));
-      }
+      const result = validatePassword(value) ? '' : pwFormat;
+      setWarnings(prev => ({...prev, pwWarning: result}));
     } else if (info === 'passwordVerify') {
-      const result = validatePassword(value);
-      setWarningValid(prev => ({...prev, isPwVerifyWarning: !result}));
+      const result = validatePassword(value) ? '' : pwFormat;
+      setWarnings(prev => ({...prev, pwVerifyWarning: result}));
       if (password !== passwordVerify) {
-        setWarningText(prev => ({...prev, pwVerifyWarningText: pwMatching}));
-      } else if (!result) {
-        setWarningText(prev => ({...prev, pwVerifyWarningText: pwFormat}));
+        setWarnings(prev => ({...prev, pwVerifyWarning: pwMatching}));
       }
     }
   };
@@ -116,34 +90,29 @@ const useSignUp = (changePage: Function) => {
   const signUp = async () => {
     try {
       const result = await postSignUpInfo(signUpInfo);
+
       const {
-        email,
-        first_name: firstName,
-        last_name: lastName,
+        email: emailKey,
+        password: passwordKey,
+        first_name: firstNameKey,
+        last_name: lastNameKey,
         message,
       } = result;
 
       if (email[0] === '이 필드는 필수 항목입니다.') {
-        setWarningValid(prev => ({...prev, isEmailWarning: true}));
-        setWarningText(prev => ({...prev, emailWarningText: noValue}));
-      } else if (email[0] === 'user의 email은/는 이미 존재합니다.') {
-        setWarningValid(prev => ({...prev, isEmailWarning: true}));
-        setWarningText(prev => ({...prev, emailWarningText: emailDuplicate}));
-      } else if (email[0] === '유효한 이메일 주소를 입력하십시오.') {
-        setWarningValid(prev => ({...prev, isEmailWarning: true}));
-        setWarningText(prev => ({...prev, emailWarningText: emailFormat}));
-      } else if (password[0] === '이 필드는 필수 항목입니다.') {
-        setWarningValid(prev => ({...prev, isPwWarning: true}));
-        setWarningText(prev => ({...prev, pwWarningText: noValue}));
+        setWarnings(prev => ({...prev, emailWarning: noValue}));
+      } else if (emailKey[0] === 'user의 email은/는 이미 존재합니다.') {
+        setWarnings(prev => ({...prev, emailWarning: emailDuplicate}));
+      } else if (emailKey[0] === '유효한 이메일 주소를 입력하십시오.') {
+        setWarnings(prev => ({...prev, emailWarning: emailFormat}));
+      } else if (passwordKey[0] === '이 필드는 필수 항목입니다.') {
+        setWarnings(prev => ({...prev, pwWarning: noValue}));
       } else if (message[0] === '숫자와 영문자 조합 8자를 입력해주세요') {
-        setWarningValid(prev => ({...prev, isPwWarning: true}));
-        setWarningText(prev => ({...prev, pwWarningText: pwFormat}));
-      } else if (firstName[0] === '이 필드는 필수 항목입니다.') {
-        setWarningValid(prev => ({...prev, isFirstNameWarning: true}));
-        setWarningText(prev => ({...prev, firstNameWarningText: noValue}));
-      } else if (lastName[0] === '이 필드는 필수 항목입니다.') {
-        setWarningValid(prev => ({...prev, isLastNameWarning: true}));
-        setWarningText(prev => ({...prev, lastNameWarningText: noValue}));
+        setWarnings(prev => ({...prev, pwWarning: pwFormat}));
+      } else if (firstNameKey[0] === '이 필드는 필수 항목입니다.') {
+        setWarnings(prev => ({...prev, firstNameWarning: noValue}));
+      } else if (lastNameKey[0] === '이 필드는 필수 항목입니다.') {
+        setWarnings(prev => ({...prev, lastNameWarning: noValue}));
       } else if (result.hasOwnProperty('id')) {
         changePage('Main');
       }
@@ -158,8 +127,7 @@ const useSignUp = (changePage: Function) => {
 
   return {
     signUpInfo,
-    warningValid,
-    warningText,
+    warnings,
     handleButtonValid,
     updateSignUpInfo,
     checkSignUpInfo,

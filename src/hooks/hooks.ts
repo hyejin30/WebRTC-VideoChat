@@ -22,6 +22,7 @@ export const postSignUpInfo = async (signUpInfo: SignUpInfoProps) => {
       }),
     });
     body = await response.json();
+    return body;
   } catch (error) {
     if (error instanceof Error) {
       Alert.alert(error.message);
@@ -29,5 +30,4 @@ export const postSignUpInfo = async (signUpInfo: SignUpInfoProps) => {
       Alert.alert(String(error));
     }
   }
-  return body;
 };

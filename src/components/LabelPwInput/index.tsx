@@ -1,10 +1,11 @@
 import React, {useState} from 'react';
+import {Platform} from 'react-native';
 import styled from 'styled-components/native';
 import {icEyeOff, icEyeOn} from '~/assets/images';
 
 type Props = {
   label: string;
-  info: string;
+  name: string;
   placeholder: string;
   value: string;
   onChangeText: Function;
@@ -13,7 +14,7 @@ type Props = {
 
 function LabelPwInput({
   label,
-  info,
+  name,
   placeholder,
   value,
   onChangeText,
@@ -33,8 +34,8 @@ function LabelPwInput({
           placeholder={placeholder}
           value={value}
           secureTextEntry={isPwNotShown}
-          onChangeText={(text: string) => onChangeText(info, text)}
-          onBlur={() => onBlur(info, value)}
+          onChangeText={(text: string) => onChangeText(name, text)}
+          onBlur={() => onBlur(name, value)}
         />
         <ShowPwButton onPress={() => handleShowPw()}>
           <ShowPwIcon source={isPwNotShown ? icEyeOff : icEyeOn} />
@@ -58,7 +59,7 @@ const PwInputWrapView = styled.View`
 
 const Input = styled.TextInput`
   flex: 1;
-  padding: 15px;
+  padding: ${Platform.OS === 'android' ? '10px' : '15px'};
   border: 1px solid ${({theme}) => theme.color.gray100};
   border-radius: 8px;
   font-size: ${({theme}) => theme.fontSize.body};

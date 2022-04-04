@@ -1,11 +1,16 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import {GoBackProps} from '~/types/dataTypes';
+import {useNavigation} from '@react-navigation/native';
 import {icBackArrow} from '~/assets/images';
 
-function GoBackButton({page, onPress}: GoBackProps) {
+function GoBackButton() {
+  const navigation = useNavigation();
+
   return (
-    <Button onPress={() => onPress(page)}>
+    <Button
+      onPress={() => {
+        navigation.goBack();
+      }}>
       <GoBackIcon source={icBackArrow} />
     </Button>
   );

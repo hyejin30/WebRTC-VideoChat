@@ -29,11 +29,6 @@ export type SignUpInfoProps = {
   passwordVerify: string;
 };
 
-export type GoBackProps = {
-  page: string;
-  onPress: Function;
-};
-
 export type LogoProps = {
   width: number;
   height: number;

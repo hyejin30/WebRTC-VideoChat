@@ -22,8 +22,7 @@ function SignUp({navigation}: SignUpScreenProps) {
 
   const {
     signUpInfo,
-    warningValid,
-    warningText,
+    warnings,
     handleButtonValid,
     updateSignUpInfo,
     checkSignUpInfo,
@@ -33,20 +32,12 @@ function SignUp({navigation}: SignUpScreenProps) {
   const {firstName, lastName, email, password, passwordVerify} = signUpInfo;
 
   const {
-    isFirstNameWarning,
-    isLastNameWarning,
-    isEmailWarning,
-    isPwWarning,
-    isPwVerifyWarning,
-  } = warningValid;
-
-  const {
-    firstNameWarningText,
-    lastNameWarningText,
-    emailWarningText,
-    pwWarningText,
-    pwVerifyWarningText,
-  } = warningText;
+    firstNameWarning,
+    lastNameWarning,
+    emailWarning,
+    pwWarning,
+    pwVerifyWarning,
+  } = warnings;
 
   const isButtonValid: boolean = useMemo(
     () => handleButtonValid(),
@@ -57,7 +48,7 @@ function SignUp({navigation}: SignUpScreenProps) {
     <StyledSafeAreaView>
       <ContainerView>
         <HeaderView>
-          <GoBackButton page="Entry" onPress={changePage} />
+          <GoBackButton />
           <HeaderText>회원가입</HeaderText>
         </HeaderView>
         <FormView>
@@ -66,63 +57,63 @@ function SignUp({navigation}: SignUpScreenProps) {
               <FirstNameView>
                 <LabelInput
                   label="성"
-                  info="firstName"
+                  name="firstName"
                   value={firstName}
                   placeholder="성을 입력해주세요"
                   onChangeText={updateSignUpInfo}
                   onBlur={checkSignUpInfo}
                 />
-                {isFirstNameWarning && (
-                  <WarningText>{firstNameWarningText}</WarningText>
+                {!!firstNameWarning && (
+                  <WarningText>{firstNameWarning}</WarningText>
                 )}
               </FirstNameView>
               <LastNameView>
                 <LabelInput
                   label="이름"
-                  info="lastName"
+                  name="lastName"
                   value={lastName}
                   placeholder="이름을 입력해주세요"
                   onChangeText={updateSignUpInfo}
                   onBlur={checkSignUpInfo}
                 />
-                {isLastNameWarning && (
-                  <WarningText>{lastNameWarningText}</WarningText>
+                {!!lastNameWarning && (
+                  <WarningText>{lastNameWarning ?? ''}</WarningText>
                 )}
               </LastNameView>
             </RowInputView>
             <InputView>
               <LabelInput
                 label="이메일"
-                info="email"
+                name="email"
                 value={email}
                 placeholder="이메일을 입력해주세요"
                 onChangeText={updateSignUpInfo}
                 onBlur={checkSignUpInfo}
               />
-              {isEmailWarning && <WarningText>{emailWarningText}</WarningText>}
+              {!!emailWarning && <WarningText>{emailWarning}</WarningText>}
             </InputView>
             <InputView>
               <LabelPwInput
                 label="비밀번호"
-                info="password"
+                name="password"
                 value={password}
                 placeholder="비밀번호를 입력해주세요"
                 onChangeText={updateSignUpInfo}
                 onBlur={checkSignUpInfo}
               />
-              {isPwWarning && <WarningText>{pwWarningText}</WarningText>}
+              {!!pwWarning && <WarningText>{pwWarning}</WarningText>}
             </InputView>
             <InputView>
               <LabelPwInput
                 label="비밀번호 확인"
-                info="passwordVerify"
+                name="passwordVerify"
                 value={passwordVerify}
                 placeholder="비밀번호를 다시 입력해주세요"
                 onChangeText={updateSignUpInfo}
                 onBlur={checkSignUpInfo}
               />
-              {isPwVerifyWarning && (
-                <WarningText>{pwVerifyWarningText}</WarningText>
+              {!!pwVerifyWarning && (
+                <WarningText>{pwVerifyWarning}</WarningText>
               )}
             </InputView>
           </View>

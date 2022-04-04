@@ -1,9 +1,10 @@
 import React from 'react';
+import {Platform} from 'react-native';
 import styled from 'styled-components/native';
 
 type Props = {
   label: string;
-  info: string;
+  name: string;
   placeholder: string;
   value: string;
   onChangeText: Function;
@@ -12,7 +13,7 @@ type Props = {
 
 function LabelInput({
   label,
-  info,
+  name,
   placeholder,
   value,
   onChangeText,
@@ -24,8 +25,8 @@ function LabelInput({
       <Input
         placeholder={placeholder}
         value={value}
-        onChangeText={(text: string) => onChangeText(info, text)}
-        onBlur={() => onBlur(info, value)}
+        onChangeText={(text: string) => onChangeText(name, text)}
+        onBlur={() => onBlur(name, value)}
       />
     </>
   );
@@ -38,7 +39,7 @@ const Label = styled.Text`
 `;
 
 const Input = styled.TextInput`
-  padding: 15px;
+  padding: ${Platform.OS === 'android' ? '10px' : '15px'};
   border: 1px solid ${({theme}) => theme.color.gray100};
   border-radius: 8px;
   font-size: ${({theme}) => theme.fontSize.body};
