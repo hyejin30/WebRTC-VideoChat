@@ -4,7 +4,7 @@ import {postSignInValue} from '~/hooks/hooks';
 import {setToken} from '~/utils/storage';
 import {MAPPING_MESSAGE} from '~/utils/validate';
 
-const useSignUp = (changePage: Function) => {
+const useSignIn = (changePage: Function) => {
   const [signInValue, setSignInValue] = useState({
     email: '',
     password: '',
@@ -72,4 +72,4 @@ const useSignUp = (changePage: Function) => {
   };
 };
 
-export default useSignUp;
+export default useSignIn;
