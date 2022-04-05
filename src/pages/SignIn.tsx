@@ -20,14 +20,8 @@ function SignIn({navigation}: SignInScreenProps) {
     [navigation],
   );
 
-  const {
-    signInValue,
-    warnings,
-    handleButtonValid,
-    updateSignInValue,
-    checkSignInValue,
-    signIn,
-  } = useSignIn(changePage);
+  const {signInValue, warnings, handleButtonValid, updateSignInValue, signIn} =
+    useSignIn(changePage);
 
   const {email, password} = signInValue;
   const {emailWarning, pwWarning} = warnings;
@@ -55,7 +49,7 @@ function SignIn({navigation}: SignInScreenProps) {
                 value={email}
                 placeholder="이메일을 입력해주세요"
                 onChangeText={updateSignInValue}
-                onBlur={checkSignInValue}
+                onBlur={() => {}}
               />
               {!!emailWarning && (
                 <WarningText>{emailWarning ?? ''}</WarningText>
@@ -68,10 +62,10 @@ function SignIn({navigation}: SignInScreenProps) {
                 value={password}
                 placeholder="비밀번호를 입력해주세요"
                 onChangeText={updateSignInValue}
-                onBlur={checkSignInValue}
+                onBlur={() => {}}
               />
+              {!!pwWarning && <WarningText>{pwWarning ?? ''}</WarningText>}
             </InputView>
-            {!!pwWarning && <WarningText>{pwWarning ?? ''}</WarningText>}
           </View>
           <StyledButton disabled={!isButtonValid} onPress={signIn}>
             로그인

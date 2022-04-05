@@ -1,6 +1,7 @@
 import {useState} from 'react';
 import {Alert} from 'react-native';
 import {postSignInValue} from '~/hooks/hooks';
+import {setToken} from '~/utils/storage';
 import {MAPPING_MESSAGE} from '~/utils/validate';
 
 const useSignUp = (changePage: Function) => {
@@ -15,11 +16,10 @@ const useSignUp = (changePage: Function) => {
   });
 
   const {email, password} = signInValue;
-  const {emailWarning, pwWarning} = warnings;
-  const {noValue} = MAPPING_MESSAGE;
+  const {emailCheck, pwCheck} = MAPPING_MESSAGE;
 
   const handleButtonValid = () => {
-    const valid: boolean = !!(email && password && emailWarning && pwWarning);
+    const valid: boolean = !!(email && password);
     return valid;
   };
 
@@ -27,26 +27,34 @@ const useSignUp = (changePage: Function) => {
     setSignInValue(prev => ({...prev, [name]: value}));
   };
 
-  const checkSignInValue = (name: string, value: string) => {
-    if (name === 'email') {
-      const result = value.length === 0 ? noValue : '';
-      setWarnings(prev => ({...prev, emailWarning: result}));
-    } else if (name === 'password') {
-      const result = value.length === 0 ? noValue : '';
-      setWarnings(prev => ({...prev, pwWarning: result}));
-    }
+  const showWarnings = () => {
+    setWarnings(prev => ({
+      ...prev,
+      emailWarning: emailCheck,
+      pwWarning: pwCheck,
+    }));
+    setTimeout(() => {
+      setWarnings(prev => ({
+        ...prev,
+        emailWarning: '',
+        pwWarning: '',
+      }));
+    }, 4000);
   };
 
   const signIn = async () => {
     try {
       const result = await postSignInValue(signInValue);
-      const {token} = result;
+      const {token, message, email: emailKey} = result;
       if (token) {
-        Alert.alert('로그인 성공');
+        setToken(token);
         changePage('Main');
+      } else if (emailKey || message) {
+        showWarnings();
       }
     } catch (error) {
       if (error instanceof Error) {
+        showWarnings();
         Alert.alert(error.message);
       } else {
         Alert.alert(String(error));
@@ -59,7 +67,7 @@ const useSignUp = (changePage: Function) => {
     warnings,
     handleButtonValid,
     updateSignInValue,
-    checkSignInValue,
+    showWarnings,
     signIn,
   };
 };
