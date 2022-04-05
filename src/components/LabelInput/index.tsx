@@ -26,7 +26,7 @@ function LabelInput({
         placeholder={placeholder}
         value={value}
         onChangeText={(text: string) => onChangeText(name, text)}
-        onBlur={() => onBlur(name)}
+        onBlur={() => onBlur(name, value)}
       />
     </>
   );

@@ -27,12 +27,12 @@ const useSignUp = (changePage: Function) => {
     setSignInValue(prev => ({...prev, [name]: value}));
   };
 
-  const checkSignInValue = (name: string) => {
+  const checkSignInValue = (name: string, value: string) => {
     if (name === 'email') {
-      const result = email.length === 0 ? noValue : '';
+      const result = value.length === 0 ? noValue : '';
       setWarnings(prev => ({...prev, emailWarning: result}));
     } else if (name === 'password') {
-      const result = password.length === 0 ? noValue : '';
+      const result = value.length === 0 ? noValue : '';
       setWarnings(prev => ({...prev, pwWarning: result}));
     }
   };
