@@ -21,6 +21,15 @@ export type VideoChatScreenProps = NativeStackScreenProps<
   'VideoChat'
 >;
 
-export type UserInfo = {
-  [key: string]: string;
+export type SignUpInfoProps = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  passwordVerify: string;
+};
+
+export type LogoProps = {
+  width: number;
+  height: number;
 };
