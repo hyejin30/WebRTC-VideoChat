@@ -61,24 +61,24 @@ const useSignUp = (changePage: Function) => {
     return valid;
   };
 
-  const updateSignUpInfo = (info: string, value: string) => {
-    setSignUpInfo(prev => ({...prev, [info]: value}));
+  const updateSignUpInfo = (name: string, value: string) => {
+    setSignUpInfo(prev => ({...prev, [name]: value}));
   };
 
-  const checkSignUpInfo = (info: string, value: string) => {
-    if (info === 'firstName') {
+  const checkSignUpInfo = (name: string, value: string) => {
+    if (name === 'firstName') {
       const result = validateName(value) ? '' : nameFormat;
       setWarnings(prev => ({...prev, firstNameWarning: result}));
-    } else if (info === 'lastName') {
+    } else if (name === 'lastName') {
       const result = validateName(value) ? '' : nameFormat;
       setWarnings(prev => ({...prev, lastNameWarning: result}));
-    } else if (info === 'email') {
+    } else if (name === 'email') {
       const result = validateEmail(value) ? '' : emailFormat;
       setWarnings(prev => ({...prev, emailWarning: result}));
-    } else if (info === 'password') {
+    } else if (name === 'password') {
       const result = validatePassword(value) ? '' : pwFormat;
       setWarnings(prev => ({...prev, pwWarning: result}));
-    } else if (info === 'passwordVerify') {
+    } else if (name === 'passwordVerify') {
       const result = validatePassword(value) ? '' : pwFormat;
       setWarnings(prev => ({...prev, pwVerifyWarning: result}));
       if (password !== passwordVerify) {
@@ -99,7 +99,7 @@ const useSignUp = (changePage: Function) => {
         message,
       } = result;
 
-      if (email[0] === '이 필드는 필수 항목입니다.') {
+      if (emailKey[0] === '이 필드는 필수 항목입니다.') {
         setWarnings(prev => ({...prev, emailWarning: noValue}));
       } else if (emailKey[0] === 'user의 email은/는 이미 존재합니다.') {
         setWarnings(prev => ({...prev, emailWarning: emailDuplicate}));

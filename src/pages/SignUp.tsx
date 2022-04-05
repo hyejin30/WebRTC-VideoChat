@@ -54,7 +54,7 @@ function SignUp({navigation}: SignUpScreenProps) {
         <FormView>
           <View>
             <RowInputView>
-              <FirstNameView>
+              <NameView>
                 <LabelInput
                   label="성"
                   name="firstName"
@@ -66,8 +66,8 @@ function SignUp({navigation}: SignUpScreenProps) {
                 {!!firstNameWarning && (
                   <WarningText>{firstNameWarning}</WarningText>
                 )}
-              </FirstNameView>
-              <LastNameView>
+              </NameView>
+              <NameView>
                 <LabelInput
                   label="이름"
                   name="lastName"
@@ -79,7 +79,7 @@ function SignUp({navigation}: SignUpScreenProps) {
                 {!!lastNameWarning && (
                   <WarningText>{lastNameWarning ?? ''}</WarningText>
                 )}
-              </LastNameView>
+              </NameView>
             </RowInputView>
             <InputView>
               <LabelInput
@@ -161,14 +161,9 @@ const RowInputView = styled(InputView)`
   margin-top: 40px;
 `;
 
-const FirstNameView = styled.View`
+const NameView = styled.View`
   flex: 1;
   margin-right: 5px;
-`;
-
-const LastNameView = styled.View`
-  flex: 1;
-  margin-left: 5px;
 `;
 
 export default SignUp;

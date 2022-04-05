@@ -3,8 +3,6 @@ import {SignUpInfoProps} from '~/types/dataTypes';
 import {fetchApi} from '~/config';
 
 export const postSignUpInfo = async (signUpInfo: SignUpInfoProps) => {
-  let body;
-
   const {firstName, lastName, email, password} = signUpInfo;
 
   try {
@@ -21,7 +19,7 @@ export const postSignUpInfo = async (signUpInfo: SignUpInfoProps) => {
         password,
       }),
     });
-    body = await response.json();
+    const body = await response.json();
     return body;
   } catch (error) {
     if (error instanceof Error) {
