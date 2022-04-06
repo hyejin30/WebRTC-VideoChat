@@ -1,3 +1,4 @@
+import {ParamListBase} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 export type RootStackParamList = {
@@ -8,24 +9,12 @@ export type RootStackParamList = {
   VideoChat: undefined;
 };
 
-export type EntryScreenProps = NativeStackScreenProps<
-  RootStackParamList,
-  'Entry'
->;
-export type SignUpScreenProps = NativeStackScreenProps<
-  RootStackParamList,
-  'SignUp'
->;
-export type SignInScreenProps = NativeStackScreenProps<
-  RootStackParamList,
-  'SignIn'
->;
-export type MainScreenProps = NativeStackScreenProps<
-  RootStackParamList,
-  'Main'
->;
+export type EntryScreenProps = NativeStackScreenProps<ParamListBase, 'Entry'>;
+export type SignUpScreenProps = NativeStackScreenProps<ParamListBase, 'SignUp'>;
+export type SignInScreenProps = NativeStackScreenProps<ParamListBase, 'SignIn'>;
+export type MainScreenProps = NativeStackScreenProps<ParamListBase, 'Main'>;
 export type VideoChatScreenProps = NativeStackScreenProps<
-  RootStackParamList,
+  ParamListBase,
   'VideoChat'
 >;
 
