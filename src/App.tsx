@@ -8,14 +8,16 @@ import SignIn from '@pages/SignIn';
 import Main from '@pages/Main';
 import VideoChat from '@pages/VideoChat';
 import theme from '~/styles/theme';
+import {RootStackParamList} from './types/dataTypes';
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<RootStackParamList>();
+
 function App() {
   return (
     <NavigationContainer>
       <ThemeProvider theme={theme}>
         <Stack.Navigator
-          initialRouteName="SignIn"
+          initialRouteName="Entry"
           screenOptions={{headerShown: false}}>
           <Stack.Screen name="Entry" component={Entry} />
           <Stack.Screen name="SignUp" component={SignUp} />

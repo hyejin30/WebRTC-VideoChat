@@ -14,7 +14,7 @@ import {SignInScreenProps} from '~/types/dataTypes';
 
 function SignIn({navigation}: SignInScreenProps) {
   const changePage = useCallback(
-    (page: string) => {
+    page => {
       navigation.navigate(page);
     },
     [navigation],

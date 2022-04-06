@@ -14,7 +14,7 @@ import {useSignUp} from '~/hooks';
 
 function SignUp({navigation}: SignUpScreenProps) {
   const changePage = useCallback(
-    (page: string) => {
+    page => {
       navigation.navigate(page);
     },
     [navigation],
