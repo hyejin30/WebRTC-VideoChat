@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React from 'react';
 import {SafeAreaView} from 'react-native';
 import styled from 'styled-components/native';
 import {MainScreenProps} from '~/types/dataTypes';
@@ -6,12 +6,9 @@ import {imgMain} from '~/assets/images';
 import {StyledButton} from '~/components';
 
 function Main({navigation}: MainScreenProps) {
-  const changePage = useCallback(
-    page => {
-      navigation.navigate(page);
-    },
-    [navigation],
-  );
+  const changePage = (page: string) => {
+    navigation.navigate(page);
+  };
 
   return (
     <StyledSafeAreaView>
