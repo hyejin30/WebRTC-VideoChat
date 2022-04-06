@@ -54,7 +54,6 @@ const useSignIn = (changePage: Function) => {
       }
     } catch (error) {
       if (error instanceof Error) {
-        showWarnings();
         Alert.alert(error.message);
       } else {
         Alert.alert(String(error));
