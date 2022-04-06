@@ -7,7 +7,7 @@ import {StyledButton} from '~/components';
 
 function Main({navigation}: MainScreenProps) {
   const changePage = useCallback(
-    (page: string) => {
+    page => {
       navigation.navigate(page);
     },
     [navigation],
