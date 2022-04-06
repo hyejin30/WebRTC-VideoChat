@@ -25,6 +25,8 @@ export const MAPPING_MESSAGE = {
   nameFormat: '유효한 이름을 입력해주세요.',
   emailDuplicate: '존재하는 이메일 주소입니다.',
   emailFormat: '유효한 이메일 주소를 입력해주세요.',
+  emailCheck: '이메일을 확인해주세요.',
   pwFormat: '숫자, 영문, 특수문자 조합 8자 이상 입력해주세요.',
   pwMatching: '비밀번호가 일치하지 않습니다.',
+  pwCheck: '비밀번호를 확인해주세요.',
 };
