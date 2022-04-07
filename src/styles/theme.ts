@@ -11,6 +11,8 @@ const theme: DefaultTheme = {
     red200: '#D60F0F',
   },
   fontSize: {
+    title: '26px',
+    subTitle: '22px',
     header: '18px',
     body: '12px',
   },
