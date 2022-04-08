@@ -5,6 +5,7 @@ import {
   mediaDevices,
   MediaStream,
 } from 'react-native-webrtc';
+import {Alert} from 'react-native';
 import styled from 'styled-components/native';
 import {MainScreenProps} from '~/types/dataTypes';
 import {btnCameraReverse, btnVideoOn, btnAudioOff} from '~/assets/images';
@@ -31,8 +32,12 @@ function VideoChat({navigation}: MainScreenProps) {
         },
       });
       setLocalStream(stream);
-    } catch (e) {
-      console.log(e);
+    } catch (error) {
+      if (error instanceof Error) {
+        Alert.alert(error.message);
+      } else {
+        Alert.alert(String(error));
+      }
     }
   };
 
