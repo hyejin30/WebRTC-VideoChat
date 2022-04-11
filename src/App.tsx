@@ -17,11 +17,7 @@ function App() {
     <NavigationContainer>
       <ThemeProvider theme={theme}>
         <Stack.Navigator
-<<<<<<< HEAD
           initialRouteName="Entry"
-=======
-          initialRouteName="VideoChat"
->>>>>>> main
           screenOptions={{headerShown: false}}>
           <Stack.Screen name="Entry" component={Entry} />
           <Stack.Screen name="SignUp" component={SignUp} />

@@ -9,12 +9,12 @@ import {
   StyledButton,
   WarningText,
 } from '~/components';
-import {SignUpScreenProps} from '~/types/dataTypes';
 import {useSignUp} from '~/hooks';
+import {RootStackParamList, SignUpScreenProps} from '~/types/dataTypes';
 
 function SignUp({navigation}: SignUpScreenProps) {
-  const changePage = (page: string) => {
-    navigation.navigate(page);
+  const changeScreen = (screen: keyof RootStackParamList) => {
+    navigation.navigate(screen);
   };
 
   const {
@@ -24,7 +24,7 @@ function SignUp({navigation}: SignUpScreenProps) {
     updateSignUpInfo,
     checkSignUpInfo,
     signUp,
-  } = useSignUp(changePage);
+  } = useSignUp(changeScreen);
 
   const {firstName, lastName, email, password, passwordVerify} = signUpInfo;
 

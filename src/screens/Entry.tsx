@@ -2,11 +2,11 @@ import React from 'react';
 import {View} from 'react-native';
 import styled from 'styled-components/native';
 import {LogoIcon, StyledButton} from '~/components';
-import {EntryScreenProps} from '~/types/dataTypes';
+import {EntryScreenProps, RootStackParamList} from '~/types/dataTypes';
 
 function Entry({navigation}: EntryScreenProps) {
-  const changePage = (page: string) => {
-    navigation.navigate(page);
+  const changeScreen = (screen: keyof RootStackParamList) => {
+    navigation.navigate(screen);
   };
 
   return (
@@ -16,10 +16,10 @@ function Entry({navigation}: EntryScreenProps) {
           <LogoIcon width={156.8} height={60} />
         </LogoView>
         <View>
-          <StyledButton onPress={() => changePage('SignIn')}>
+          <StyledButton onPress={() => changeScreen('SignIn')}>
             로그인
           </StyledButton>
-          <SignUpButton onPress={() => changePage('SignUp')}>
+          <SignUpButton onPress={() => changeScreen('SignUp')}>
             <ButtonText>회원가입</ButtonText>
           </SignUpButton>
         </View>
