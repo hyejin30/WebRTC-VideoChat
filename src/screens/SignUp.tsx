@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo} from 'react';
+import React, {useMemo} from 'react';
 import {View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
@@ -9,16 +9,13 @@ import {
   StyledButton,
   WarningText,
 } from '~/components';
-import {SignUpScreenProps} from '~/types/dataTypes';
 import {useSignUp} from '~/hooks';
+import {RootStackParamList, SignUpScreenProps} from '~/types/dataTypes';
 
 function SignUp({navigation}: SignUpScreenProps) {
-  const changePage = useCallback(
-    (page: string) => {
-      navigation.navigate(page);
-    },
-    [navigation],
-  );
+  const changeScreen = (screen: keyof RootStackParamList) => {
+    navigation.navigate(screen);
+  };
 
   const {
     signUpInfo,
@@ -27,7 +24,7 @@ function SignUp({navigation}: SignUpScreenProps) {
     updateSignUpInfo,
     checkSignUpInfo,
     signUp,
-  } = useSignUp(changePage);
+  } = useSignUp(changeScreen);
 
   const {firstName, lastName, email, password, passwordVerify} = signUpInfo;
 

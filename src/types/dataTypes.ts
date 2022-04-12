@@ -1,7 +1,6 @@
-import {ParamListBase} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
-type RootStackParamList = {
+export type RootStackParamList = {
   Entry: undefined;
   SignUp: undefined;
   SignIn: undefined;
@@ -13,11 +12,20 @@ export type EntryScreenProps = NativeStackScreenProps<
   RootStackParamList,
   'Entry'
 >;
-export type SignUpScreenProps = NativeStackScreenProps<ParamListBase, 'SignUp'>;
-export type SignInScreenProps = NativeStackScreenProps<ParamListBase, 'SignIn'>;
-export type MainScreenProps = NativeStackScreenProps<ParamListBase, 'Main'>;
+export type SignUpScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  'SignUp'
+>;
+export type SignInScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  'SignIn'
+>;
+export type MainScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  'Main'
+>;
 export type VideoChatScreenProps = NativeStackScreenProps<
-  ParamListBase,
+  RootStackParamList,
   'VideoChat'
 >;
 

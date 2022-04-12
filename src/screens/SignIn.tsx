@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo} from 'react';
+import React, {useMemo} from 'react';
 import {View} from 'react-native';
 import styled from 'styled-components/native';
 import {
@@ -10,18 +10,15 @@ import {
   WarningText,
 } from '~/components';
 import useSignIn from '~/hooks/useSignIn';
-import {SignInScreenProps} from '~/types/dataTypes';
+import {SignInScreenProps, RootStackParamList} from '~/types/dataTypes';
 
 function SignIn({navigation}: SignInScreenProps) {
-  const changePage = useCallback(
-    (page: string) => {
-      navigation.navigate(page);
-    },
-    [navigation],
-  );
+  const changeScreen = (screen: keyof RootStackParamList) => {
+    navigation.navigate(screen);
+  };
 
   const {signInValue, warnings, handleButtonValid, updateSignInValue, signIn} =
-    useSignIn(changePage);
+    useSignIn(changeScreen);
 
   const {email, password} = signInValue;
   const {emailWarning, pwWarning} = warnings;

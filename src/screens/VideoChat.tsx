@@ -7,18 +7,18 @@ import {
 } from 'react-native-webrtc';
 import {Alert} from 'react-native';
 import styled from 'styled-components/native';
-import {MainScreenProps} from '~/types/dataTypes';
+import {RootStackParamList, VideoChatScreenProps} from '~/types/dataTypes';
 import {btnCameraReverse, btnVideoOn, btnAudioOff} from '~/assets/images';
 import {Pressable} from 'react-native';
 
 const TURN_SERVER = 'stun:stun.l.google.com:19302';
 
-function VideoChat({navigation}: MainScreenProps) {
+function VideoChat({navigation}: VideoChatScreenProps) {
   const [localStream, setLocalStream] = useState<MediaStream | null>(null);
   let isFront = true;
 
-  const changeScreen = (page: string) => {
-    navigation.navigate(page);
+  const changeScreen = (screen: keyof RootStackParamList) => {
+    navigation.navigate(screen);
   };
 
   const getMedia = async () => {

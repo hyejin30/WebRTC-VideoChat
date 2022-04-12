@@ -1,13 +1,13 @@
 import React from 'react';
 import {SafeAreaView} from 'react-native';
 import styled from 'styled-components/native';
-import {MainScreenProps} from '~/types/dataTypes';
-import {imgMain} from '~/assets/images';
 import {StyledButton} from '~/components';
+import {MainScreenProps, RootStackParamList} from '~/types/dataTypes';
+import {imgMain} from '~/assets/images';
 
 function Main({navigation}: MainScreenProps) {
-  const changePage = (page: string) => {
-    navigation.navigate(page);
+  const changeScreen = (screen: keyof RootStackParamList) => {
+    navigation.navigate(screen);
   };
 
   return (
@@ -21,7 +21,7 @@ function Main({navigation}: MainScreenProps) {
         <ImageView>
           <MainImage source={imgMain} resizeMode="contain" />
         </ImageView>
-        <StyledButton onPress={() => changePage('VideoChat')}>
+        <StyledButton onPress={() => changeScreen('VideoChat')}>
           화상연결
         </StyledButton>
       </ContainerView>
