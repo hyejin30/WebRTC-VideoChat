@@ -1,66 +1,17 @@
-import React, {useEffect, useState} from 'react';
-import {
-  RTCPeerConnection,
-  RTCView,
-  mediaDevices,
-  MediaStream,
-} from 'react-native-webrtc';
-import {Alert} from 'react-native';
+import React from 'react';
+import {RTCView} from 'react-native-webrtc';
 import styled from 'styled-components/native';
 import {RootStackParamList, VideoChatScreenProps} from '~/types/dataTypes';
 import {btnCameraReverse, btnVideoOn, btnAudioOff} from '~/assets/images';
 import {Pressable} from 'react-native';
-
-const TURN_SERVER = 'stun:stun.l.google.com:19302';
+import {useMySocket} from '~/hooks';
 
 function VideoChat({navigation}: VideoChatScreenProps) {
-  const [localStream, setLocalStream] = useState<MediaStream | null>(null);
-  let isFront = true;
+  const {localStream, remoteStream} = useMySocket();
 
   const changeScreen = (screen: keyof RootStackParamList) => {
     navigation.navigate(screen);
   };
-
-  const getMedia = async () => {
-    try {
-      await mediaDevices.enumerateDevices();
-      const stream = await mediaDevices.getUserMedia({
-        audio: true,
-        video: {
-          frameRate: 30,
-          facingMode: isFront ? 'user' : 'environment',
-        },
-      });
-      setLocalStream(stream);
-    } catch (error) {
-      if (error instanceof Error) {
-        Alert.alert(error.message);
-      } else {
-        Alert.alert(String(error));
-      }
-    }
-  };
-
-  const makeConnection = () => {
-    const configuration = {
-      iceServers: [
-        {
-          urls: [TURN_SERVER],
-        },
-      ],
-    };
-    const localPc = new RTCPeerConnection(configuration);
-    localPc.addStream(localStream);
-  };
-
-  const initCall = async () => {
-    await getMedia();
-    makeConnection();
-  };
-
-  useEffect(() => {
-    initCall();
-  }, []);
 
   return (
     <ContainerView>
@@ -73,7 +24,7 @@ function VideoChat({navigation}: VideoChatScreenProps) {
       </ExitButton>
       <RemoteRTCView
         objectFit="cover"
-        streamURL={localStream ? localStream.toURL() : ''}
+        streamURL={remoteStream ? remoteStream.toURL() : ''}
       />
       <IconView>
         <Pressable>
