@@ -53,7 +53,7 @@ function VideoChat({navigation}: VideoChatScreenProps) {
           <LocalVideoIcon source={icVideoOffHuman} resizeMode="contain" />
         )}
         <LocalNameView>
-          <LocalNameText>김아이</LocalNameText>
+          <UserNameText>김아이</UserNameText>
           {!isAudio && (
             <LocalAudioIcon source={icAudioOff} resizeMode="contain" />
           )}
@@ -136,8 +136,6 @@ const LocalNameView = styled.View`
   width: 100%;
   background-color: ${({theme}) => theme.color.black};
 `;
-
-const LocalNameText = styled(UserNameText)``;
 
 const LocalAudioIcon = styled.Image`
   width: 15px;
