@@ -1,4 +1,4 @@
-import {useEffect, useMemo, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {
   RTCPeerConnection,
   mediaDevices,
@@ -36,11 +36,10 @@ const useMySocket = () => {
   const [isVideoFront, setIsVideoFront] = useState(true);
   const [localStream, setLocalStream] = useState<MediaStream | null>(null);
   const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
-  let stream: MediaStream | null = null;
 
   const getMedia = async () => {
     try {
-      stream = await mediaDevices.getUserMedia({
+      const stream = await mediaDevices.getUserMedia({
         audio: isAudio,
         video: isVideo
           ? {
@@ -69,15 +68,14 @@ const useMySocket = () => {
   };
 
   const makeConnection = () => {
-    // FIXME: candidate type
+    // FIXME: candidate type 지정
     pc.onicecandidate = event => {
       const {candidate} = event;
       ws.send(makeMessage('ice', candidate));
       console.log('ICE 전송');
     };
 
-    // FIXME: stream type
-    // FIXME: local, remote 구분 필요
+    // FIXME: stream type 지정 / local, remote 구분 필요
     pc.onaddstream = event => {
       console.log('애드스트림 이벤트', event);
       const {stream: rmStream} = event;
