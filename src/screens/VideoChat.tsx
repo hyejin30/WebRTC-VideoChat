@@ -1,13 +1,30 @@
 import React from 'react';
+import {Pressable} from 'react-native';
 import {RTCView} from 'react-native-webrtc';
 import styled from 'styled-components/native';
 import {RootStackParamList, VideoChatScreenProps} from '~/types/dataTypes';
-import {btnCameraReverse, btnVideoOn, btnAudioOff} from '~/assets/images';
-import {Pressable} from 'react-native';
 import {useMySocket} from '~/hooks';
+import {
+  btnCameraReverse,
+  btnAudioOff,
+  btnAudioOn,
+  btnVideoOn,
+  btnVideoOff,
+  icVideoOffHuman,
+  icAudioOff,
+} from '~/assets/images';
 
 function VideoChat({navigation}: VideoChatScreenProps) {
-  const {localStream, remoteStream} = useMySocket();
+  const {
+    localStream,
+    remoteStream,
+    isVideoFront,
+    isVideo,
+    isAudio,
+    setIsVideoFront,
+    setIsVideo,
+    setIsAudio,
+  } = useMySocket();
 
   const changeScreen = (screen: keyof RootStackParamList) => {
     navigation.navigate(screen);
@@ -15,26 +32,51 @@ function VideoChat({navigation}: VideoChatScreenProps) {
 
   return (
     <ContainerView>
-      <MyRTCView
-        objectFit="cover"
-        streamURL={localStream ? localStream.toURL() : ''}
-      />
-      <ExitButton onPress={() => changeScreen('Entry')}>
-        <ButtonText>나가기</ButtonText>
-      </ExitButton>
       <RemoteRTCView
         objectFit="cover"
         streamURL={remoteStream ? remoteStream.toURL() : ''}
       />
+      <ExitButton onPress={() => changeScreen('Entry')}>
+        <ButtonText>나가기</ButtonText>
+      </ExitButton>
+      <RemoteNameView>
+        <RemoteNameText>
+          {remoteStream ? '김퍼즐' : '연결 대기중'}
+        </RemoteNameText>
+      </RemoteNameView>
+      <LocalView>
+        <LocalRTCView
+          objectFit="cover"
+          streamURL={localStream ? localStream.toURL() : ''}
+        />
+        {!isVideo && (
+          <LocalVideoIcon source={icVideoOffHuman} resizeMode="contain" />
+        )}
+        <LocalNameView>
+          <LocalNameText>김아이</LocalNameText>
+          {!isAudio && (
+            <LocalAudioIcon source={icAudioOff} resizeMode="contain" />
+          )}
+        </LocalNameView>
+      </LocalView>
       <IconView>
-        <Pressable>
+        <Pressable
+          onPress={() => {
+            setIsVideoFront(!isVideoFront);
+          }}>
           <Icon source={btnCameraReverse} />
         </Pressable>
-        <Pressable>
-          <Icon source={btnAudioOff} />
+        <Pressable
+          onPress={() => {
+            setIsAudio(!isAudio);
+          }}>
+          <Icon source={isAudio ? btnAudioOn : btnAudioOff} />
         </Pressable>
-        <Pressable>
-          <Icon source={btnVideoOn} />
+        <Pressable
+          onPress={() => {
+            setIsVideo(!isVideo);
+          }}>
+          <Icon source={isVideo ? btnVideoOn : btnVideoOff} />
         </Pressable>
       </IconView>
     </ContainerView>
@@ -46,16 +88,67 @@ const ContainerView = styled.View`
   position: relative;
 `;
 
-const MyRTCView = styled(RTCView)`
+const RemoteRTCView = styled(RTCView)`
   flex: 1;
 `;
 
-const RemoteRTCView = styled(RTCView)`
+const LocalView = styled.View`
+  align-items: center;
   position: absolute;
   bottom: 173px;
   right: 15px;
   width: 100px;
   height: 140px;
+`;
+
+const LocalRTCView = styled(RTCView)`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+`;
+
+const UserNameText = styled.Text`
+  padding: 3.25px 0 2px;
+  text-align: center;
+  font-size: ${({theme}) => theme.fontSize.header};
+  color: ${({theme}) => theme.color.white};
+  background-color: ${({theme}) => theme.color.black};
+  opacity: 0.8;
+`;
+
+const RemoteNameView = styled.View`
+  align-items: center;
+`;
+
+const RemoteNameText = styled(UserNameText)`
+  position: absolute;
+  bottom: 173px;
+  padding: 3.25px 15px 2px;
+  border-radius: 5px;
+`;
+
+const LocalNameView = styled.View`
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background-color: ${({theme}) => theme.color.black};
+`;
+
+const LocalNameText = styled(UserNameText)``;
+
+const LocalAudioIcon = styled.Image`
+  width: 15px;
+  height: 18px;
+  margin-left: 5px;
+`;
+
+const LocalVideoIcon = styled.Image`
+  width: 100%;
+  height: 100%;
+  background-color: ${({theme}) => theme.color.gray200};
 `;
 
 const ExitButton = styled.Pressable`

@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {
   RTCPeerConnection,
   mediaDevices,
@@ -7,14 +7,16 @@ import {
   RTCIceCandidate,
 } from 'react-native-webrtc';
 import {Alert} from 'react-native';
+
+// FIXME: .env 재설정
 // import Config from 'react-native-config';
 // const TURN_SERVER: string = Config.TURN_SERVER_URL;
 // const SOCKET_URL: string = Config.SOCKET_URL;
 
 const TURN_SERVER = 'turn:54.180.143.248';
-const SOCKET_URL =
-  'wss://connect.websocket.in/v3/1?api_key=oCdCMcMPQpbvNjUIzqtvF1d2X2okWpDQj4AwARJuAgtjhzKxVEjQU6IdCjwm&notify_self';
+const SOCKET_URL = 'ws://09e6-123-143-18-134.ngrok.io/ws/call/test';
 
+// FIXME: username, credential 숨기기
 const configuration = {
   iceServers: [
     {
@@ -25,39 +27,27 @@ const configuration = {
   ],
 };
 
+const ws = new WebSocket(SOCKET_URL);
+const pc = new RTCPeerConnection(configuration);
+
 const useMySocket = () => {
+  const [isAudio, setIsAudio] = useState(true);
+  const [isVideo, setIsVideo] = useState(true);
+  const [isVideoFront, setIsVideoFront] = useState(true);
   const [localStream, setLocalStream] = useState<MediaStream | null>(null);
   const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
-  const [isFrontVideo, setIsFrontVideo] = useState(true);
-  const ws = new WebSocket(SOCKET_URL);
-  const pc = new RTCPeerConnection(configuration);
-  console.log('localStream :', localStream);
-  console.log('remoteStream :', remoteStream);
-
-  // FIXME: event type <string>
-  pc.onicecandidate = event => {
-    console.log(event);
-    const {candidate} = event;
-    if (candidate) {
-      ws.send(makeMessage('ice', candidate));
-    }
-  };
-
-  // FIXME: event type <string>
-  pc.onaddstream = event => {
-    console.log(event);
-    const {stream} = event;
-    setRemoteStream(stream);
-  };
+  let stream: MediaStream | null = null;
 
   const getMedia = async () => {
     try {
-      const stream = await mediaDevices.getUserMedia({
-        audio: true,
-        video: {
-          frameRate: 30,
-          facingMode: isFrontVideo ? 'user' : 'environment',
-        },
+      stream = await mediaDevices.getUserMedia({
+        audio: isAudio,
+        video: isVideo
+          ? {
+              frameRate: 30,
+              facingMode: isVideoFront ? 'user' : 'environment',
+            }
+          : false,
       });
       setLocalStream(stream);
       pc.addStream(stream);
@@ -72,19 +62,30 @@ const useMySocket = () => {
 
   const makeMessage = (
     type: string,
-    payload: RTCSessionDescription | RTCIceCandidate | string,
+    data?: RTCSessionDescription | RTCIceCandidate | string,
   ) => {
-    const msg = {type, data: payload};
-    return JSON.stringify(msg);
+    const event = {type, data};
+    return JSON.stringify(event);
   };
 
   const makeConnection = () => {
-    console.log('websocket :', ws);
-    console.log('pc :', pc);
+    // FIXME: candidate type
+    pc.onicecandidate = event => {
+      const {candidate} = event;
+      ws.send(makeMessage('ice', candidate));
+      console.log('ICE 전송');
+    };
+
+    // FIXME: stream type
+    // FIXME: local, remote 구분 필요
+    pc.onaddstream = event => {
+      console.log('애드스트림 이벤트', event);
+      const {stream: rmStream} = event;
+      setRemoteStream(rmStream);
+    };
 
     ws.onopen = () => {
       console.log('웹소켓서버와 연결 성공');
-      console.log('websocket :', ws);
     };
 
     ws.onclose = () => {
@@ -92,51 +93,70 @@ const useMySocket = () => {
     };
 
     ws.onerror = error => {
-      console.log('error :', error);
+      Alert.alert('연결이 종료되었습니다');
+      if (error instanceof Error) {
+        console.log(error.message);
+      } else {
+        console.log(String(error));
+      }
     };
 
-    ws.onmessage = ({data}) => {
-      const message = JSON.parse(data);
-      switch (message.type) {
-        case 'welcome':
-          async () => {
-            const offer: RTCSessionDescription = await pc.createOffer();
-            pc.setLocalDescription(offer);
-            ws.send(makeMessage('offer', offer));
-          };
-          break;
+    ws.onmessage = (event: WebSocketMessageEvent) => {
+      const {type, data} = JSON.parse(event.data);
+
+      switch (type) {
         case 'offer':
-          async (offer: RTCSessionDescription) => {
+          (async function (offer: RTCSessionDescription) {
             pc.setRemoteDescription(offer);
             const answer: RTCSessionDescription = await pc.createAnswer();
             pc.setLocalDescription(answer);
             ws.send(makeMessage('answer', answer));
-          };
+            console.log('answer를 보냈습니다');
+          })(data);
           break;
+
         case 'answer':
-          (answer: RTCSessionDescription) => {
+          (async (answer: RTCSessionDescription) => {
             pc.setRemoteDescription(answer);
-          };
+          })(data);
           break;
+
         case 'ICE':
-          (ice: RTCIceCandidate) => {
+          ((ice: RTCIceCandidate) => {
             pc.addIceCandidate(ice);
-          };
+          })(data);
           break;
       }
     };
   };
 
-  const initCall = async () => {
-    await getMedia();
+  const sendCall = async () => {
+    const offer: RTCSessionDescription = await pc.createOffer();
+    pc.setLocalDescription(offer);
+    ws.send(makeMessage('offer', offer));
+    console.log('offer를 보냈습니다');
+  };
+
+  const initCall = () => {
+    getMedia();
     makeConnection();
+    setTimeout(() => sendCall(), 8000);
   };
 
   useEffect(() => {
     initCall();
-  }, []);
+  }, [isVideoFront, isVideo, isAudio]);
 
-  return {localStream, remoteStream};
+  return {
+    localStream,
+    remoteStream,
+    isVideoFront,
+    isVideo,
+    isAudio,
+    setIsVideoFront,
+    setIsVideo,
+    setIsAudio,
+  };
 };
 
 export default useMySocket;

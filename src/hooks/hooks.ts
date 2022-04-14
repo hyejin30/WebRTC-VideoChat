@@ -6,7 +6,9 @@ export const postSignUpInfo = async (signUpInfo: SignUpInfoProps) => {
   const {firstName, lastName, email, password} = signUpInfo;
 
   try {
-    const response = await fetch(fetchApi.signUp, {
+    // FIXME: .env 수정하기
+    // const response = await fetch(fetchApi.signUp, {
+    const response = await fetch('https://rtcworld.ga/users/signup', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
