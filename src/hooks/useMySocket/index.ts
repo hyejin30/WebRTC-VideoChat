@@ -14,7 +14,7 @@ import {Alert} from 'react-native';
 // const SOCKET_URL: string = Config.SOCKET_URL;
 
 const TURN_SERVER = 'turn:54.180.143.248';
-const SOCKET_URL = 'ws://09e6-123-143-18-134.ngrok.io/ws/call/test';
+const SOCKET_URL = 'ws://6a70-49-165-97-104.ngrok.io/ws/call/test';
 
 // FIXME: username, credential 숨기기
 const configuration = {
@@ -68,22 +68,18 @@ const useMySocket = () => {
   };
 
   const makeConnection = () => {
-    // FIXME: candidate type 지정
     pc.onicecandidate = event => {
       const {candidate} = event;
       ws.send(makeMessage('ice', candidate));
-      console.log('ICE 전송');
     };
 
-    // FIXME: stream type 지정 / local, remote 구분 필요
     pc.onaddstream = event => {
-      console.log('애드스트림 이벤트', event);
       const {stream: rmStream} = event;
       setRemoteStream(rmStream);
     };
 
     ws.onopen = () => {
-      console.log('웹소켓서버와 연결 성공');
+      Alert.alert('연결 성공');
     };
 
     ws.onclose = () => {
@@ -91,11 +87,10 @@ const useMySocket = () => {
     };
 
     ws.onerror = error => {
-      Alert.alert('연결이 종료되었습니다');
       if (error instanceof Error) {
-        console.log(error.message);
+        Alert.alert(error.message);
       } else {
-        console.log(String(error));
+        Alert.alert(String(error));
       }
     };
 
@@ -109,7 +104,6 @@ const useMySocket = () => {
             const answer: RTCSessionDescription = await pc.createAnswer();
             pc.setLocalDescription(answer);
             ws.send(makeMessage('answer', answer));
-            console.log('answer를 보냈습니다');
           })(data);
           break;
 
@@ -128,17 +122,16 @@ const useMySocket = () => {
     };
   };
 
-  const sendCall = async () => {
+  const sendOffer = async () => {
     const offer: RTCSessionDescription = await pc.createOffer();
     pc.setLocalDescription(offer);
     ws.send(makeMessage('offer', offer));
-    console.log('offer를 보냈습니다');
   };
 
   const initCall = () => {
     getMedia();
     makeConnection();
-    setTimeout(() => sendCall(), 8000);
+    setTimeout(() => sendOffer(), 8000);
   };
 
   useEffect(() => {
