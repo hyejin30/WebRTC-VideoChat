@@ -17,7 +17,8 @@ export const setToken = async (value: string) => {
 
 export const getToken = async () => {
   try {
-    await AsyncStorage.getItem(AUTH_TOKEN_KEY);
+    const token = await AsyncStorage.getItem(AUTH_TOKEN_KEY);
+    return token;
   } catch (error) {
     if (error instanceof Error) {
       Alert.alert(error.message);
