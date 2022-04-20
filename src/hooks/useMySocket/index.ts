@@ -1,4 +1,5 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
+import {Alert} from 'react-native';
 import {
   RTCPeerConnection,
   mediaDevices,
@@ -6,36 +7,31 @@ import {
   RTCSessionDescription,
   RTCIceCandidate,
 } from 'react-native-webrtc';
-import {Alert} from 'react-native';
+import {
+  TURN_SERVER,
+  SOCKET_SERVER,
+  CONFIG_USERNAME,
+  CONFIG_CREDENTIAL,
+} from '@env';
 
-// FIXME: .env 재설정
-// import Config from 'react-native-config';
-// const TURN_SERVER: string = Config.TURN_SERVER_URL;
-// const SOCKET_URL: string = Config.SOCKET_URL;
-
-const TURN_SERVER = 'turn:54.180.143.248';
-const SOCKET_URL = 'ws://6a70-49-165-97-104.ngrok.io/ws/call/test';
-
-// FIXME: username, credential 숨기기
 const configuration = {
   iceServers: [
     {
       urls: [TURN_SERVER],
-      username: 'robbins4bos',
-      credential: 'robbins4bos',
+      username: CONFIG_USERNAME,
+      credential: CONFIG_CREDENTIAL,
     },
   ],
 };
 
-const ws = new WebSocket(SOCKET_URL);
-const pc = new RTCPeerConnection(configuration);
-
 const useMySocket = () => {
+  const ws = useRef(new WebSocket(SOCKET_SERVER));
+  const pc = useRef(new RTCPeerConnection(configuration));
+  const [localStream, setLocalStream] = useState<MediaStream | null>(null);
+  const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
   const [isAudio, setIsAudio] = useState(true);
   const [isVideo, setIsVideo] = useState(true);
   const [isVideoFront, setIsVideoFront] = useState(true);
-  const [localStream, setLocalStream] = useState<MediaStream | null>(null);
-  const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
 
   const getMedia = async () => {
     try {
@@ -49,7 +45,7 @@ const useMySocket = () => {
           : false,
       });
       setLocalStream(stream);
-      pc.addStream(stream);
+      pc.current.addStream(stream);
     } catch (error) {
       if (error instanceof Error) {
         Alert.alert(error.message);
@@ -68,25 +64,25 @@ const useMySocket = () => {
   };
 
   const makeConnection = () => {
-    pc.onicecandidate = event => {
+    pc.current.onicecandidate = event => {
       const {candidate} = event;
-      ws.send(makeMessage('ice', candidate));
+      ws.current.send(makeMessage('ice', candidate));
     };
 
-    pc.onaddstream = event => {
+    pc.current.onaddstream = event => {
       const {stream: rmStream} = event;
       setRemoteStream(rmStream);
     };
 
-    ws.onopen = () => {
+    ws.current.onopen = () => {
       Alert.alert('연결 성공');
     };
 
-    ws.onclose = () => {
+    ws.current.onclose = () => {
       Alert.alert('연결이 종료되었습니다');
     };
 
-    ws.onerror = error => {
+    ws.current.onerror = error => {
       if (error instanceof Error) {
         Alert.alert(error.message);
       } else {
@@ -94,28 +90,29 @@ const useMySocket = () => {
       }
     };
 
-    ws.onmessage = (event: WebSocketMessageEvent) => {
+    ws.current.onmessage = (event: WebSocketMessageEvent) => {
       const {type, data} = JSON.parse(event.data);
 
       switch (type) {
         case 'offer':
           (async function (offer: RTCSessionDescription) {
-            pc.setRemoteDescription(offer);
-            const answer: RTCSessionDescription = await pc.createAnswer();
-            pc.setLocalDescription(answer);
-            ws.send(makeMessage('answer', answer));
+            pc.current.setRemoteDescription(offer);
+            const answer: RTCSessionDescription =
+              await pc.current.createAnswer();
+            pc.current.setLocalDescription(answer);
+            ws.current.send(makeMessage('answer', answer));
           })(data);
           break;
 
         case 'answer':
-          (async (answer: RTCSessionDescription) => {
-            pc.setRemoteDescription(answer);
+          ((answer: RTCSessionDescription) => {
+            pc.current.setRemoteDescription(answer);
           })(data);
           break;
 
         case 'ICE':
           ((ice: RTCIceCandidate) => {
-            pc.addIceCandidate(ice);
+            pc.current.addIceCandidate(ice);
           })(data);
           break;
       }
@@ -123,19 +120,31 @@ const useMySocket = () => {
   };
 
   const sendOffer = async () => {
-    const offer: RTCSessionDescription = await pc.createOffer();
-    pc.setLocalDescription(offer);
-    ws.send(makeMessage('offer', offer));
+    try {
+      const offer: RTCSessionDescription = await pc.current.createOffer();
+      pc.current.setLocalDescription(offer);
+      ws.current.send(makeMessage('offer', offer));
+    } catch (error) {
+      if (error instanceof Error) {
+        Alert.alert(error.message);
+      } else {
+        Alert.alert(String(error));
+      }
+    }
   };
 
-  const initCall = () => {
-    getMedia();
+  const initCall = async () => {
+    await getMedia();
     makeConnection();
-    setTimeout(() => sendOffer(), 8000);
+    sendOffer();
   };
 
   useEffect(() => {
     initCall();
+  }, []);
+
+  useEffect(() => {
+    getMedia();
   }, [isVideoFront, isVideo, isAudio]);
 
   return {

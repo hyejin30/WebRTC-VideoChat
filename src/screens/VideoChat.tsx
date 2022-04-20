@@ -1,9 +1,9 @@
 import React from 'react';
-import {Pressable} from 'react-native';
+import {Animated, Pressable} from 'react-native';
 import {RTCView} from 'react-native-webrtc';
 import styled from 'styled-components/native';
 import {RootStackParamList, VideoChatScreenProps} from '~/types/dataTypes';
-import {useMySocket} from '~/hooks';
+import {useDrag, useMySocket} from '~/hooks';
 import {
   btnCameraReverse,
   btnAudioOff,
@@ -26,6 +26,8 @@ function VideoChat({navigation}: VideoChatScreenProps) {
     setIsAudio,
   } = useMySocket();
 
+  const {panResponder, style} = useDrag();
+
   const changeScreen = (screen: keyof RootStackParamList) => {
     navigation.navigate(screen);
   };
@@ -44,7 +46,7 @@ function VideoChat({navigation}: VideoChatScreenProps) {
           {remoteStream ? '김퍼즐' : '연결 대기중'}
         </RemoteNameText>
       </RemoteNameView>
-      <LocalView>
+      <LocalView style={style} {...panResponder.panHandlers}>
         <LocalRTCView
           objectFit="cover"
           streamURL={localStream ? localStream.toURL() : ''}
@@ -92,7 +94,7 @@ const RemoteRTCView = styled(RTCView)`
   flex: 1;
 `;
 
-const LocalView = styled.View`
+const LocalView = styled(Animated.View)`
   align-items: center;
   position: absolute;
   bottom: 173px;
