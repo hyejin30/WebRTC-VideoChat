@@ -1,10 +1,11 @@
-퍼즐AI 인턴십 프로젝트
+### 퍼즐AI 인턴십 프로젝트
+
 - 원격의료 솔루션 VOIDOC의 영상 통화 기능 구현
-- 기술 스택 : ReactNative
+- 사용 기술 : ReactNative
 - 개발 인원 : 1인 (김혜진)
 - 개발 기간 : 22.04.05 ~ 22.4.20 (16일)
 
-구현 사항
+### 구현 사항
 
 [영상 통화]
 - Local Video 구현 [(링크)](https://github.com/hyejin30/WebRTC-APPLICATION-Frontend/pull/7);
